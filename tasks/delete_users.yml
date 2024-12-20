@@ -1,0 +1,67 @@
+---
+
+- name: Deletion users
+  no_log: true
+  block:
+    - name: Delete users
+      ansible.builtin.uri:
+        url: "{{ kctl_api_url }}"
+        validate_certs: "{{ kctl_validate_certs }}"
+        timeout: 600
+        method: POST
+        headers:
+          Cookie: "{{ logon_response.cookies_string }}"
+          X-Token: "{{ logon_response.json.result.token }}"
+        body_format: json
+        body: |
+          {
+            "jsonrpc":"2.0","id":1,"method":"Batch.run",
+            "params":
+              {
+                "commandList":
+                  [
+                    {
+                      "method":"Users.remove",
+                      "params":
+                        {
+                          "userIds":{{ users_list_delete }},
+                          "domainId":"{{ kctl_domain_id }}"
+                        }
+                    },
+                    {
+                      "method":"Session.getConfigTimestamp"
+                    }
+                  ]
+              }
+          }
+      register: users_delete_response
+      delegate_to: localhost
+
+    - name: Timestamp list
+      ansible.builtin.set_fact:
+        timestamp_list_delete: "{{ timestamp_list_delete | default([]) + item.result.clientTimestampList }}"
+      with_items: "{{ users_delete_response.json.result }}"
+      when: item.result.clientTimestampList is defined
+
+    - name: Confirm Config
+      ansible.builtin.uri:
+        url: "{{ kctl_api_url }}"
+        validate_certs: "{{ kctl_validate_certs }}"
+        timeout: 600
+        method: POST
+        headers:
+          Cookie: "{{ logon_response.cookies_string }}"
+          X-Token: "{{ logon_response.json.result.token }}"
+        body_format: json
+        body: |
+          {
+            "jsonrpc":"2.0","id":1,"method":"Session.confirmConfig",
+            "params":
+              {
+                "clientTimestampList":{{ timestamp_list_delete }}
+              }
+          }
+      register: confirmation_delete
+      delegate_to: localhost
+
+...

@@ -1,0 +1,78 @@
+---
+# defaults file for kctl_users
+
+# user list
+kctl_users:
+  - {}
+
+# User list excluded from processing
+kctl_protected_users:
+  - Admin
+
+# API connection variables
+kctl_port: 4081
+kctl_api_url: https://{{ ansible_host }}:{{ kctl_port }}/admin/api/jsonrpc/
+kctl_validate_certs: false
+
+# Users domain. It should be the same for the user list.
+kctl_domain_id: "local"
+
+# Polices
+kctl_user_creating_polices_enable: true
+kctl_user_pass_change_force_when_creating: true
+
+# User default variables
+kctl_user_name: ""
+kctl_user_password: ""
+kctl_user_password_changed: false
+
+kctl_user_full_name: ""
+kctl_user_description: ""
+kctl_user_email: ""
+kctl_user_language: "detect"
+
+kctl_user_auth_type: "Internal"
+kctl_user_use_template: false
+kctl_user_ad_enabled: true
+kctl_user_local_enabled: true
+kctl_user_groups: []
+
+kctl_user_read_config: false
+kctl_user_write_config: false
+kctl_user_unlock_rule: false
+kctl_user_dial_ras_connection: false
+kctl_user_connect_vpn: false
+kctl_user_use_p2p: false
+
+kctl_user_quota_daily_enabled: false
+kctl_user_quota_daily_type: "QuotaBoth"
+kctl_user_quota_daily_limit: 0
+kctl_user_quota_daily_units: "GigaBytes"
+kctl_user_quota_weekly_enabled: false
+kctl_user_quota_weekly_type: "QuotaBoth"
+kctl_user_quota_weekly_limit: 0
+kctl_user_quota_weekly_units: "GigaBytes"
+kctl_user_quota_monthly_enabled: false
+kctl_user_quota_monthly_type: "QuotaBoth"
+kctl_user_quota_monthly_limit: 0
+kctl_user_quota_monthly_units: "GigaBytes"
+kctl_user_quota_block_traffic: false
+kctl_user_quota_notify_user: false
+
+kctl_user_www_filter_java_applet: false
+kctl_user_www_filter_embed_object: false
+kctl_user_www_filter_script: false
+kctl_user_www_filter_popup: false
+kctl_user_www_filter_referer: false
+
+kctl_user_auto_login_addresses_enabled: false
+kctl_user_auto_login_addresses_value: []
+kctl_user_auto_login_address_group_enabled: false
+kctl_user_auto_login_address_group_id: ""
+kctl_user_auto_login_mac_addresses_enabled: false
+kctl_user_auto_login_mac_addresses_value: []
+
+kctl_user_vpn_address_enabled: false
+kctl_user_vpn_address_value: ""
+
+...

@@ -1,0 +1,7 @@
+---
+
+- name: Report
+  ansible.builtin.debug:
+    msg: "{{ kctl_report }}"
+
+...

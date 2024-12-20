@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Konstantin Piatakov
+  description: Kerio Control users management via API
+  issue_tracker_url: https://github.com/drimkor/ansible-role--kerio-control-user-management/issues
+  license: MIT
+  min_ansible_version: '2.14'
+  platforms:
+    - name: "Debian"
+      versions:
+        - all
+  galaxy_tags: [kerio, control, users]
+dependencies: []

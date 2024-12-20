@@ -1,0 +1,29 @@
+---
+
+- name: Login to a Kerio Control API
+  ansible.builtin.uri:
+    url: "{{ kctl_api_url }}"
+    validate_certs: "{{ kctl_validate_certs }}"
+    timeout: 600
+    method: POST
+    body_format: json
+    body: |
+      {
+        "jsonrpc":"2.0","id":1,"method":"Session.login",
+        "params":
+          {
+            "userName":"{{ kerio_control_admin_user }}",
+            "password":"{{ kerio_control_admin_pass }}",
+            "application":
+              {
+                "name":"Ansible",
+                "vendor":"",
+                "version":""
+              }
+          }
+      }
+  register: logon_response
+  no_log: true
+  delegate_to: localhost
+
+...

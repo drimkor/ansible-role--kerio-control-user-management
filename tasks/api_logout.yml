@@ -1,0 +1,21 @@
+---
+
+- name: Logout and close connection to the server
+  ansible.builtin.uri:
+    url: "{{ kctl_api_url }}"
+    validate_certs: "{{ kctl_validate_certs }}"
+    timeout: 600
+    method: POST
+    headers:
+      Cookie: "{{ logon_response.cookies_string }}"
+      X-Token: "{{ logon_response.json.result.token }}"
+    body_format: json
+    body: |
+      {
+        "jsonrpc":"2.0","id":1,"method":"Session.logout"
+      }
+  register: response
+  no_log: true
+  delegate_to: localhost
+
+...

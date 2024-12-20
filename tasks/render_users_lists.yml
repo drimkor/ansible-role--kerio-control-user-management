@@ -1,0 +1,62 @@
+---
+
+- name: Render variables
+  no_log: true
+  block:
+    - name: Render delete users list
+      ansible.builtin.set_fact:
+        users_list_delete: "{{ users_list_delete | default([]) + [item.id] }}"
+        report_list_delete: "{{ report_list_delete | default([]) +
+          [{'id': item.id, 'user_name': item.credentials.userName, 'full_name': item.fullName}] }}"
+      with_items: "{{ users_get_response.json.result.list }}"
+      when:
+        - item.credentials.userName not in kctl_users | map(attribute='kctl_user_name')
+        - item.credentials.userName not in kctl_protected_users
+
+    - name: Render 'create user list' without policies applied
+      ansible.builtin.set_fact:
+        users_list_create: "{{ users_list_create | default([]) + [user_data] }}"
+      with_items: "{{ kctl_users }}"
+      when:
+        - not kctl_user_creating_polices_enable
+        - item.kctl_user_name not in users_get_response.json.result.list | map(attribute='credentials.userName')
+
+    - name: Render 'create user list' with policies applied
+      ansible.builtin.set_fact:
+        users_list_create: "{{ users_list_create | default([]) + [user_data | combine(kctl_user_creating_polices, recursive=true)] }}"
+      with_items: "{{ kctl_users }}"
+      when:
+        - kctl_user_creating_polices_enable
+        - item.kctl_user_name not in users_get_response.json.result.list | map(attribute='credentials.userName')
+
+    - name: User variables render from users_get_response
+      ansible.builtin.set_fact:
+        kctl_users_host: "{{ kctl_users_host | default([]) + [user_config_vars_template] }}"
+      with_items: "{{ users_get_response.json.result.list }}"
+
+    - name: User variables render from user configuration for users in users_get_response
+      ansible.builtin.set_fact:
+        kctl_users_conf: "{{ kctl_users_conf | default([]) + [user_config_vars_template] }}"
+      with_items: "{{ kctl_users }}"
+      when:
+        - item.kctl_user_name in users_get_response.json.result.list | map(attribute='credentials.userName')
+
+    - name: Render username list for update
+      ansible.builtin.set_fact:
+        username_list_update: "{{ kctl_users_conf | difference(kctl_users_host) | map(attribute='kctl_user_name') }}"
+      when:
+        - kctl_users_conf is defined
+
+    - name: Render update users list
+      ansible.builtin.set_fact:
+        users_list_update: "{{ users_list_update | default([]) +
+          [{'user_id': users_get_response.json.result.list |
+          selectattr('credentials.userName', '==', item.kctl_user_name) |
+          map(attribute='id'), 'user_details': user_data}] }}"
+      with_items: "{{ kctl_users }}"
+      when:
+        - username_list_update is defined
+        - item.kctl_user_name in username_list_update
+        - item.kctl_user_name not in kctl_protected_users
+
+...

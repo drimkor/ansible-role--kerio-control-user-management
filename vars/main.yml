@@ -1,0 +1,248 @@
+---
+# vars file for kctl_users
+
+# The JSON template is used to create and update user configuration
+### Start of JSON template
+"user_data":
+  {
+    "data":
+      {
+        "rights":
+          {
+            "readConfig":"{{ item.kctl_user_read_config | default(kctl_user_read_config) }}",
+            "writeConfig":"{{ item.kctl_user_write_config | default(kctl_user_write_config) }}",
+            "unlockRule":"{{ item.kctl_user_unlock_rule | default(kctl_user_unlock_rule) }}",
+            "dialRasConnection":"{{ item.kctl_user_dial_ras_connection | default(kctl_user_dial_ras_connection) }}",
+            "connectVpn":"{{ item.kctl_user_connect_vpn | default(kctl_user_connect_vpn) }}",
+            "useP2p":"{{ item.kctl_user_use_p2p | default(kctl_user_use_p2p) }}"
+          },
+        "quota":
+          {
+            "daily":
+              {
+                "enabled":"{{ item.kctl_user_quota_daily_enabled | default(kctl_user_quota_daily_enabled) }}",
+                "type":"{{ item.kctl_user_quota_daily_type | default(kctl_user_quota_daily_type) }}",
+                "limit":
+                  {
+                    "value":"{{ item.kctl_user_quota_daily_limit | default(kctl_user_quota_daily_limit) }}",
+                    "units":"{{ item.kctl_user_quota_daily_units | default(kctl_user_quota_daily_units) }}"
+                  }
+              },
+            "weekly":
+              {
+                "enabled":"{{ item.kctl_user_quota_weekly_enabled | default(kctl_user_quota_weekly_enabled) }}",
+                "type":"{{ item.kctl_user_quota_weekly_type | default(kctl_user_quota_weekly_type) }}",
+                "limit":
+                  {
+                    "value":"{{ item.kctl_user_quota_weekly_limit | default(kctl_user_quota_weekly_limit) }}",
+                    "units":"{{ item.kctl_user_quota_weekly_units | default(kctl_user_quota_weekly_units) }}"
+                  }
+              },
+            "monthly":
+              {
+                "enabled":"{{ item.kctl_user_quota_monthly_enabled | default(kctl_user_quota_monthly_enabled) }}",
+                "type":"{{ item.kctl_user_quota_monthly_type | default(kctl_user_quota_monthly_type) }}",
+                "limit":
+                  {
+                    "value":"{{ item.kctl_user_quota_monthly_limit | default(kctl_user_quota_monthly_limit) }}",
+                    "units":"{{ item.kctl_user_quota_monthly_units | default(kctl_user_quota_monthly_units) }}"
+                  }
+              },
+            "blockTraffic":"{{ item.kctl_user_quota_block_traffic | default(kctl_user_quota_block_traffic) }}",
+            "notifyUser":"{{ item.kctl_user_quota_notify_user | default(kctl_user_quota_notify_user) }}"
+          },
+        "wwwFilter":
+          {
+            "javaApplet":"{{ item.kctl_user_www_filter_java_applet | default(kctl_user_www_filter_java_applet) }}",
+            "embedObject":"{{ item.kctl_user_www_filter_embed_object | default(kctl_user_www_filter_embed_object) }}",
+            "script":"{{ item.kctl_user_www_filter_script | default(kctl_user_www_filter_script) }}",
+            "popup":"{{ item.kctl_user_www_filter_popup | default(kctl_user_www_filter_popup) }}",
+            "referer":"{{ item.kctl_user_www_filter_referer | default(kctl_user_www_filter_referer) }}"
+          },
+        "language":"{{ item.kctl_user_language | default(kctl_user_language) }}"
+      },
+    "credentials":
+      {
+        "userName":"{{ item.kctl_user_name | default(kctl_user_name) }}",
+        "password":"{{ item.kctl_user_password | default(kctl_user_password) }}",
+        "passwordChanged":"{{ item.kctl_user_password_changed | default(kctl_user_password_changed) }}"
+      },
+    "fullName":"{{ item.kctl_user_full_name | default(kctl_user_full_name) }}",
+    "description":"{{ item.kctl_user_description | default(kctl_user_description) }}",
+    "email":"{{ item.kctl_user_email | default(kctl_user_email) }}",
+    "authType":"{{ item.kctl_user_auth_type | default(kctl_user_auth_type) }}",
+    "useTemplate":"{{ item.kctl_user_use_template | default(kctl_user_use_template) }}",
+    "adEnabled":"{{ item.kctl_user_ad_enabled | default(kctl_user_ad_enabled) }}",
+    "localEnabled":"{{ item.kctl_user_local_enabled | default(kctl_user_local_enabled) }}",
+    "groups":"{{ item.kctl_user_groups | default(kctl_user_groups) }}",
+    "autoLogin":
+      {
+        "addresses":
+          {
+            "enabled":"{{ item.kctl_user_auto_login_addresses_enabled | default(kctl_user_auto_login_addresses_enabled) }}",
+            "value":"{{ item.kctl_user_auto_login_addresses_value | default(kctl_user_auto_login_addresses_value) }}"
+          },
+        "addressGroup":
+          {
+            "enabled":"{{ item.kctl_user_auto_login_address_group_enabled | default(kctl_user_auto_login_address_group_enabled) }}",
+            "id":"{{ item.kctl_user_auto_login_address_group_id | default(kctl_user_auto_login_address_group_id) }}"
+          },
+        "macAddresses":
+          {
+            "enabled":"{{ item.kctl_user_auto_login_mac_addresses_enabled | default(kctl_user_auto_login_mac_addresses_enabled) }}",
+            "value":"{{ item.kctl_user_auto_login_mac_addresses_value | default(kctl_user_auto_login_mac_addresses_value) }}"
+          }
+      },
+    "vpnAddress":
+      {
+        "enabled":"{{ item.kctl_user_vpn_address_enabled | default(kctl_user_vpn_address_enabled) }}",
+        "value": "{{ item.kctl_user_vpn_address_value | default(kctl_user_vpn_address_value) }}"
+      }
+  }
+### End of JSON template
+
+# Variables template used to create policies
+### Start of variables template
+kctl_user_creating_polices: {"credentials":{"passwordChanged":"{{ kctl_user_pass_change_force_when_creating }}"}}
+### End of variables template
+
+# Variables template used to compare existing  and configured user configuration
+### Start of variables template
+user_config_vars_template:
+  {
+    kctl_user_read_config: "{{ item.data.rights.readConfig |
+      default(item.kctl_user_read_config |
+      default(kctl_user_read_config)) }}",
+    kctl_user_write_config: "{{ item.data.rights.writeConfig |
+      default(item.kctl_user_write_config |
+      default(kctl_user_write_config)) }}",
+    kctl_user_unlock_rule: "{{ item.data.rights.unlockRule |
+      default(item.kctl_user_unlock_rule |
+      default(kctl_user_unlock_rule)) }}",
+    kctl_user_dial_ras_connection: "{{ item.data.rights.dialRasConnection |
+      default(item.kctl_user_dial_ras_connection |
+      default(kctl_user_dial_ras_connection)) }}",
+    kctl_user_connect_vpn: "{{ item.data.rights.connectVpn |
+      default(item.kctl_user_connect_vpn |
+      default(kctl_user_connect_vpn)) }}",
+    kctl_user_use_p2p: "{{ item.data.rights.useP2p |
+      default(item.kctl_user_use_p2p |
+      default(kctl_user_use_p2p)) }}",
+    kctl_user_quota_daily_enabled: "{{ item.data.quota.daily.enabled |
+      default(item.kctl_user_quota_daily_enabled |
+      default(kctl_user_quota_daily_enabled)) }}",
+    kctl_user_quota_daily_type: "{{ item.data.quota.daily.type |
+      default(item.kctl_user_quota_daily_type |
+      default(kctl_user_quota_daily_type)) }}",
+    kctl_user_quota_daily_limit: "{{ item.data.quota.daily.limit.value |
+      default(item.kctl_user_quota_daily_limit |
+      default(kctl_user_quota_daily_limit)) }}",
+    kctl_user_quota_daily_units: "{{ item.data.quota.daily.limit.units |
+      default(item.kctl_user_quota_daily_units |
+      default(kctl_user_quota_daily_units)) }}",
+    kctl_user_quota_weekly_enabled: "{{ item.data.quota.weekly.enabled |
+      default(item.kctl_user_quota_weekly_enabled |
+      default(kctl_user_quota_weekly_enabled)) }}",
+    kctl_user_quota_weekly_type: "{{ item.data.quota.weekly.type |
+      default(item.kctl_user_quota_weekly_type |
+      default(kctl_user_quota_weekly_type)) }}",
+    kctl_user_quota_weekly_limit: "{{ item.data.quota.weekly.limit.value |
+      default(item.kctl_user_quota_weekly_limit |
+      default(kctl_user_quota_weekly_limit)) }}",
+    kctl_user_quota_weekly_units: "{{ item.data.quota.weekly.limit.units |
+      default(item.kctl_user_quota_weekly_units |
+      default(kctl_user_quota_weekly_units)) }}",
+    kctl_user_quota_monthly_enabled: "{{ item.data.quota.monthly.enabled |
+      default(item.kctl_user_quota_monthly_enabled |
+      default(kctl_user_quota_monthly_enabled)) }}",
+    kctl_user_quota_monthly_type: "{{ item.data.quota.monthly.type |
+      default(item.kctl_user_quota_monthly_type |
+      default(kctl_user_quota_monthly_type)) }}",
+    kctl_user_quota_monthly_limit: "{{ item.data.quota.monthly.limit.value |
+      default(item.kctl_user_quota_monthly_limit |
+      default(kctl_user_quota_monthly_limit)) }}",
+    kctl_user_quota_monthly_units: "{{ item.data.quota.monthly.limit.units |
+      default(item.kctl_user_quota_monthly_units |
+      default(kctl_user_quota_monthly_units)) }}",
+    kctl_user_quota_block_traffic: "{{ item.data.quota.blockTraffic |
+      default(item.kctl_user_quota_block_traffic |
+      default(kctl_user_quota_block_traffic)) }}",
+    kctl_user_quota_notify_user: "{{ item.data.quota.notifyUser |
+      default(item.kctl_user_quota_notify_user |
+      default(kctl_user_quota_notify_user)) }}",
+    kctl_user_www_filter_java_applet: "{{ item.data.wwwFilter.javaApplet |
+      default(item.kctl_user_www_filter_java_applet |
+      default(kctl_user_www_filter_java_applet)) }}",
+    kctl_user_www_filter_embed_object: "{{ item.data.wwwFilter.embedObject |
+      default(item.kctl_user_www_filter_embed_object |
+      default(kctl_user_www_filter_embed_object)) }}",
+    kctl_user_www_filter_script: "{{ item.data.wwwFilter.script |
+      default(item.kctl_user_www_filter_script |
+      default(kctl_user_www_filter_script)) }}",
+    kctl_user_www_filter_popup: "{{ item.data.wwwFilter.popup |
+      default(item.kctl_user_www_filter_popup |
+      default(kctl_user_www_filter_popup)) }}",
+    kctl_user_www_filter_referer: "{{ item.data.wwwFilter.referer |
+      default(item.kctl_user_www_filter_referer |
+      default(kctl_user_www_filter_referer)) }}",
+    kctl_user_language: "{{ item.data.language |
+      default(item.kctl_user_language |
+      default(kctl_user_language)) }}",
+    kctl_user_name: "{{ item.credentials.userName |
+      default(item.kctl_user_name |
+      default(kctl_user_name)) }}",
+    kctl_user_password_changed: "{{ item.credentials.passwordChanged |
+      default(item.kctl_user_password_changed |
+      default(kctl_user_password_changed)) }}",
+    kctl_user_full_name: "{{ item.fullName |
+      default(item.kctl_user_full_name |
+      default(kctl_user_full_name)) }}",
+    kctl_user_description: "{{ item.description |
+      default(item.kctl_user_description |
+      default(kctl_user_description)) }}",
+    kctl_user_email: "{{ item.email |
+      default(item.kctl_user_email |
+      default(kctl_user_email)) }}",
+    kctl_user_auth_type: "{{ item.authType |
+      default(item.kctl_user_auth_type |
+      default(kctl_user_auth_type)) }}",
+    kctl_user_use_template: "{{ item.useTemplate |
+      default(item.kctl_user_use_template |
+      default(kctl_user_use_template)) }}",
+    kctl_user_ad_enabled: "{{ item.adEnabled |
+      default(item.kctl_user_ad_enabled |
+      default(kctl_user_ad_enabled)) }}",
+    kctl_user_local_enabled: "{{ item.localEnabled |
+      default(item.kctl_user_local_enabled |
+      default(kctl_user_local_enabled)) }}",
+    kctl_user_groups: "{{ item.groups |
+      default(item.kctl_user_groups |
+      default(kctl_user_groups)) }}",
+    kctl_user_auto_login_addresses_enabled: "{{ item.autoLogin.addresses.enabled |
+      default(item.kctl_user_auto_login_addresses_enabled |
+      default(kctl_user_auto_login_addresses_enabled)) }}",
+    kctl_user_auto_login_addresses_value: "{{ item.autoLogin.addresses.value |
+      default(item.kctl_user_auto_login_addresses_value |
+      default(kctl_user_auto_login_addresses_value)) }}",
+    kctl_user_auto_login_address_group_enabled: "{{ item.autoLogin.addressGroup.enabled |
+      default(item.kctl_user_auto_login_address_group_enabled |
+      default(kctl_user_auto_login_address_group_enabled)) }}",
+    kctl_user_auto_login_address_group_id: "{{ item.autoLogin.addressGroup.id |
+      default(item.kctl_user_auto_login_address_group_id |
+      default(kctl_user_auto_login_address_group_id)) }}",
+    kctl_user_auto_login_mac_addresses_enabled: "{{ item.autoLogin.macAddresses.enabled |
+      default(item.kctl_user_auto_login_mac_addresses_enabled |
+      default(kctl_user_auto_login_mac_addresses_enabled)) }}",
+    kctl_user_auto_login_mac_addresses_value: "{{ item.autoLogin.macAddresses.value |
+      default(item.kctl_user_auto_login_mac_addresses_value |
+      default(kctl_user_auto_login_mac_addresses_value)) }}",
+    kctl_user_vpn_address_enabled: "{{ item.vpnAddress.enabled |
+      default(item.kctl_user_vpn_address_enabled |
+      default(kctl_user_vpn_address_enabled)) }}",
+    kctl_user_vpn_address_value: "{{ item.vpnAddress.value |
+      default(item.kctl_user_vpn_address_value |
+      default(kctl_user_vpn_address_value)) }}"
+  }
+### End of variables template
+
+...

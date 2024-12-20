@@ -1,0 +1,27 @@
+---
+
+- name: Render report
+  no_log: true
+  block:
+    - name: Get users after all operations
+      ansible.builtin.include_tasks:
+        file: get_users.yml
+
+    - name: Render existing users list
+      ansible.builtin.set_fact:
+        user_list_exists: "{{ user_list_exists | default([]) + [{'id': item.id, 'user_name': item.credentials.userName, 'full_name': item.fullName}] }}"
+      with_items: "{{ users_get_response.json.result.list }}"
+
+    - name: Render variable report list create
+      ansible.builtin.set_fact:
+        report_list_create: "{{ report_list_create | default([]) + [{'id': item.id, 'user_name': item.user_name, 'full_name': item.full_name}] }}"
+      with_items: "{{ user_list_exists }}"
+      when:
+        - users_create_response is defined
+        - item.id in users_create_response.json.result.result | map(attribute='id')
+
+    - name: Render report
+      ansible.builtin.set_fact:
+        kctl_report: "{{ lookup('ansible.builtin.template', 'report.j2') }}"
+
+...
