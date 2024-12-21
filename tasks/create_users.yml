@@ -16,7 +16,8 @@
         "params":
           {
             "users":{{ kctl_users_list_create }},
-            "domainId":"{{ kctl_domain_id }}"          }
+            "domainId":"{{ kctl_domain_id }}"
+          }
       }
   register: kctl_users_create_response
   no_log: true
