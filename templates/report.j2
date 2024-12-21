@@ -1,97 +1,97 @@
 {# Set counters #}
-{% set counter_create = namespace(value=0) %}
-{% set counter_update = namespace(value=0) %}
-{% set counter_delete = namespace(value=0) %}
-{% set counter_error = namespace(value=0) %}
-{% set counter_existen = namespace(value=0) %}
+{% set kctl_counter_create = namespace(value=0) %}
+{% set kctl_counter_update = namespace(value=0) %}
+{% set kctl_counter_delete = namespace(value=0) %}
+{% set kctl_counter_error = namespace(value=0) %}
+{% set kctl_counter_existen = namespace(value=0) %}
 {##}
 Report:
 {{ now(utc=true,fmt='%Y-%m-%d %H:%M:%S') }} (UTC)
-{% if users_list_delete is defined %}
+{% if kctl_users_list_delete is defined %}
 
 Users deletion report:
 
-{% if users_delete_response.json.result[0].result %}
-  {% for item in report_list_delete -%}
+{% if kctl_users_delete_response.json.result[0].result %}
+  {% for item in kctl_report_list_delete -%}
     {{ '[ D ]  ' }}User: {{ item.id }}  -  {{ item.user_name }}  -  {{ item.full_name }}
-{% set counter_delete.value = counter_delete.value + 1 %}
+{% set kctl_counter_delete.value = kctl_counter_delete.value + 1 %}
   {% endfor %}
-  {%- if users_delete_response.json.result[0].result.errors != [] -%} 
-    {{ '[ ERROR ]  '}}{{ users_delete_response.json.result[0].result.errors }}
-{% set counter_error.value = counter_error.value + 1 %}
+  {%- if kctl_users_delete_response.json.result[0].result.errors != [] -%} 
+    {{ '[ ERROR ]  '}}{{ kctl_users_delete_response.json.result[0].result.errors }}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
   {% endif %}
 {% else %}
   {{ '[ ERROR ]' }}
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
 {% endif%}
 
-  {% if confirmation_delete.json.result.confirmed is defined %}
-    {%- if confirmation_delete.json.result.confirmed -%}
+  {% if kctl_confirmation_delete.json.result.confirmed is defined %}
+    {%- if kctl_confirmation_delete.json.result.confirmed -%}
       {{ '[ OK ]  '}}The users' configuration has been confirmed.
     {%- else -%}
       {{ '[ ERROR ]  '}}The users' configuration has not been confirmed.
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
     {%- endif %}
   {%- else -%}
     {{ '[ ERROR ]  '}}The confirmation state of the new configuration for users is not defined.
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
   {%- endif %}
 
 {% endif %}
 {##}
-{% if users_list_update is defined %}
+{% if kctl_users_list_update is defined %}
 
 Users updation report:
 
-{% if users_update_response.results %}
-  {% for item in users_update_response.results %}
+{% if kctl_users_update_response.results %}
+  {% for item in kctl_users_update_response.results %}
     {%- if item.json.result[0].result.errors == [] -%}
-    {{ '[ U ]  ' }}{%- set counter_update.value = counter_update.value + 1 -%}
+    {{ '[ U ]  ' }}{%- set kctl_counter_update.value = kctl_counter_update.value + 1 -%}
     {%- else -%}
-    {{ '[Err]  ' }}{%- set counter_error.value = counter_error.value + 1 -%}
+    {{ '[Err]  ' }}{%- set kctl_counter_error.value = kctl_counter_error.value + 1 -%}
     {%- endif -%}
       User: {{ item.item.user_id[0] }}  -  {{ item.item.user_details.credentials.userName }}  -  {{ item.item.user_details.fullName }}
     {%- if item.json.result[0].result.errors != [] -%} 
       {{ '[ ERROR ]  '}}{{ item.json.result[0].result.errors }}
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
     {%- endif %}
 
   {% endfor %}
 {% else %}
   {{ '[ ERROR ]' }}
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
 {%- endif%}
 
-  {% if confirmation_update.json.result.confirmed is defined %}
-    {%- if confirmation_update.json.result.confirmed -%}
+  {% if kctl_confirmation_update.json.result.confirmed is defined %}
+    {%- if kctl_confirmation_update.json.result.confirmed -%}
       {{ '[ OK ]  '}}The users' configuration has been confirmed.
     {%- else -%}
       {{ '[ ERROR ]  '}}The users' configuration has not been confirmed.
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
     {%- endif %}
   {%- else -%}
     {{ '[ ERROR ]  '}}The confirmation state of the new configuration for users is not defined.
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
   {% endif %}
 
 {% endif %}
 {##}
-{% if users_list_create is defined %}
+{% if kctl_users_list_create is defined %}
 
 Users creation report:
 
-{% if users_create_response.json %}
-  {% for item in report_list_create -%}
+{% if kctl_users_create_response.json %}
+  {% for item in kctl_report_list_create -%}
     {{ '[ C ]  ' }}User: {{ item.id }}  -  {{ item.user_name }}  -  {{ item.full_name }}
-{% set counter_create.value = counter_create.value + 1 %}
+{% set kctl_counter_create.value = kctl_counter_create.value + 1 %}
   {% endfor %}
-  {%- if users_create_response.json.result.errors != [] -%} 
-    {{ '[ ERROR ]  '}}{{ users_create_response.json.result.errors }}
-{% set counter_error.value = counter_error.value + 1 %}
+  {%- if kctl_users_create_response.json.result.errors != [] -%} 
+    {{ '[ ERROR ]  '}}{{ kctl_users_create_response.json.result.errors }}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
   {% endif %}
 {% else %}
   {{ '[ ERROR ]' }}
-{% set counter_error.value = counter_error.value + 1 %}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
 {%- endif%}
 
 {% endif %}
@@ -100,12 +100,12 @@ Users creation report:
 
 All existing users on the Kerio Control host.
 
-  {% for item in user_list_exists -%}
+  {% for item in kctl_user_list_exists -%}
     User: {{ item.id }}  -  {{ item.user_name }}  -  {{ item.full_name }}
-{% set counter_existen.value = counter_existen.value + 1 %}
+{% set kctl_counter_existen.value = kctl_counter_existen.value + 1 %}
   {% endfor %}
 
-Total: {{ counter_existen.value }}
+Total: {{ kctl_counter_existen.value }}
 {{ '____________________________________________________________________________________________________' }}
 
-Delete: {{ counter_delete.value }}   Create: {{ counter_create.value }}   Update: {{ counter_update.value }}   Error: {{ counter_error.value }}
+Delete: {{ kctl_counter_delete.value }}   Create: {{ kctl_counter_create.value }}   Update: {{ kctl_counter_update.value }}   Error: {{ kctl_counter_error.value }}

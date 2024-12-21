@@ -16,17 +16,17 @@
 - name: Delete users
   ansible.builtin.include_tasks:
     file: delete_users.yml
-  when: users_list_delete is defined
+  when: kctl_users_list_delete is defined
 
 - name: Update users
   ansible.builtin.include_tasks:
     file: update_users.yml
-  when: users_list_update is defined
+  when: kctl_users_list_update is defined
 
 - name: Create users
   ansible.builtin.include_tasks:
     file: create_users.yml
-  when: users_list_create is defined
+  when: kctl_users_list_create is defined
 
 - name: Render report
   ansible.builtin.include_tasks:

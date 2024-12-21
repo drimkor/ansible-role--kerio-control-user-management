@@ -22,7 +22,7 @@
               }
           }
       }
-  register: logon_response
+  register: kctl_logon_response
   no_log: true
   delegate_to: localhost
 

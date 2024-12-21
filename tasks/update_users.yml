@@ -10,8 +10,8 @@
         timeout: 600
         method: POST
         headers:
-          Cookie: "{{ logon_response.cookies_string }}"
-          X-Token: "{{ logon_response.json.result.token }}"
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
         body_format: json
         body: |
           {
@@ -32,8 +32,8 @@
                   ]
               }
           }
-      with_items: "{{ users_list_update }}"
-      register: users_update_response
+      with_items: "{{ kctl_users_list_update }}"
+      register: kctl_users_update_response
       delegate_to: localhost
 
     - name: Reloads configuration and returns timestamp of current configuration
@@ -43,21 +43,21 @@
         timeout: 600
         method: POST
         headers:
-          Cookie: "{{ logon_response.cookies_string }}"
-          X-Token: "{{ logon_response.json.result.token }}"
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
         body_format: json
         body: |
           {
             "jsonrpc":"2.0","id":1,"method":"Session.getConfigTimestamp"
           }
-      register: get_config_timestamp_response
+      register: kctl_get_config_timestamp_response
       delegate_to: localhost
 
     - name: Timestamp list
       ansible.builtin.set_fact:
-        timestamp_list_update: "{{ timestamp_list_update | default([]) + [item] }}"
-      with_items: "{{ get_config_timestamp_response.json.result.clientTimestampList }}"
-      when: get_config_timestamp_response.json.result.clientTimestampList is defined
+        kctl_timestamp_list_update: "{{ kctl_timestamp_list_update | default([]) + [item] }}"
+      with_items: "{{ kctl_get_config_timestamp_response.json.result.clientTimestampList }}"
+      when: kctl_get_config_timestamp_response.json.result.clientTimestampList is defined
 
     - name: Confirm the new configuration
       ansible.builtin.uri:
@@ -66,19 +66,19 @@
         timeout: 600
         method: POST
         headers:
-          Cookie: "{{ logon_response.cookies_string }}"
-          X-Token: "{{ logon_response.json.result.token }}"
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
         body_format: json
         body: |
           {
             "jsonrpc":"2.0","id":1,"method":"Session.confirmConfig",
             "params":
               {
-                "clientTimestampList":{{ timestamp_list_update }}
+                "clientTimestampList":{{ kctl_timestamp_list_update }}
               }
           }
-      register: confirmation_update
-      when: timestamp_list_update is defined
+      register: kctl_confirmation_update
+      when: kctl_timestamp_list_update is defined
       delegate_to: localhost
 
 ...

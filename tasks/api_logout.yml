@@ -7,14 +7,13 @@
     timeout: 600
     method: POST
     headers:
-      Cookie: "{{ logon_response.cookies_string }}"
-      X-Token: "{{ logon_response.json.result.token }}"
+      Cookie: "{{ kctl_logon_response.cookies_string }}"
+      X-Token: "{{ kctl_logon_response.json.result.token }}"
     body_format: json
     body: |
       {
         "jsonrpc":"2.0","id":1,"method":"Session.logout"
       }
-  register: response
   no_log: true
   delegate_to: localhost
 

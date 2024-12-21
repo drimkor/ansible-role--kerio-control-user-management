@@ -10,8 +10,8 @@
         timeout: 600
         method: POST
         headers:
-          Cookie: "{{ logon_response.cookies_string }}"
-          X-Token: "{{ logon_response.json.result.token }}"
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
         body_format: json
         body: |
           {
@@ -24,7 +24,7 @@
                       "method":"Users.remove",
                       "params":
                         {
-                          "userIds":{{ users_list_delete }},
+                          "userIds":{{ kctl_users_list_delete }},
                           "domainId":"{{ kctl_domain_id }}"
                         }
                     },
@@ -34,13 +34,13 @@
                   ]
               }
           }
-      register: users_delete_response
+      register: kctl_users_delete_response
       delegate_to: localhost
 
     - name: Timestamp list
       ansible.builtin.set_fact:
-        timestamp_list_delete: "{{ timestamp_list_delete | default([]) + item.result.clientTimestampList }}"
-      with_items: "{{ users_delete_response.json.result }}"
+        kctl_timestamp_list_delete: "{{ kctl_timestamp_list_delete | default([]) + item.result.clientTimestampList }}"
+      with_items: "{{ kctl_users_delete_response.json.result }}"
       when: item.result.clientTimestampList is defined
 
     - name: Confirm Config
@@ -50,18 +50,18 @@
         timeout: 600
         method: POST
         headers:
-          Cookie: "{{ logon_response.cookies_string }}"
-          X-Token: "{{ logon_response.json.result.token }}"
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
         body_format: json
         body: |
           {
             "jsonrpc":"2.0","id":1,"method":"Session.confirmConfig",
             "params":
               {
-                "clientTimestampList":{{ timestamp_list_delete }}
+                "clientTimestampList":{{ kctl_timestamp_list_delete }}
               }
           }
-      register: confirmation_delete
+      register: kctl_confirmation_delete
       delegate_to: localhost
 
 ...

@@ -7,8 +7,8 @@
     timeout: 600
     method: POST
     headers:
-      Cookie: "{{ logon_response.cookies_string }}"
-      X-Token: "{{ logon_response.json.result.token }}"
+      Cookie: "{{ kctl_logon_response.cookies_string }}"
+      X-Token: "{{ kctl_logon_response.json.result.token }}"
     body_format: json
     body: |
       {
@@ -24,7 +24,7 @@
             "domainId":"{{ kctl_domain_id }}"
           }
       }
-  register: users_get_response
+  register: kctl_users_get_response
   no_log: true
   delegate_to: localhost
 

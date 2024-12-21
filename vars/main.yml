@@ -3,7 +3,7 @@
 
 # The JSON template is used to create and update user configuration
 ### Start of JSON template
-"user_data":
+"kctl_user_data":
   {
     "data":
       {
@@ -108,7 +108,7 @@ kctl_user_creating_polices: {"credentials":{"passwordChanged":"{{ kctl_user_pass
 
 # Variables template used to compare existing  and configured user configuration
 ### Start of variables template
-user_config_vars_template:
+kctl_user_config_vars_template:
   {
     kctl_user_read_config: "{{ item.data.rights.readConfig |
       default(item.kctl_user_read_config |

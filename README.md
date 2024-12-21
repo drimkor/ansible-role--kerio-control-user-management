@@ -110,7 +110,7 @@ kctl_user_auto_login_mac_addresses_value: []
 kctl_user_vpn_address_enabled: false
 kctl_user_vpn_address_value: ""
 ```
-For more information on the ```kctl_user_*``` variables, refer to the official Kerio Control API documentation. To inspect API calls, use the ```user_data``` variable in ```var/main.yml```.
+For more information on the ```kctl_user_*``` variables, refer to the official Kerio Control API documentation. To inspect API calls, use the ```kctl_user_data``` variable in ```var/main.yml```.
 
 ---
 
