@@ -5,7 +5,7 @@
 kctl_users:
   - {}
 
-# User list excluded from processing
+# List of users excluded from processing
 kctl_protected_users:
   - Admin
 
@@ -17,7 +17,7 @@ kctl_validate_certs: false
 # Users domain. It should be the same for the user list.
 kctl_domain_id: "local"
 
-# Polices
+# Policies
 kctl_user_creating_polices_enable: true
 kctl_user_pass_change_force_when_creating: true
 
