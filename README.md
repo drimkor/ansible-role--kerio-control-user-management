@@ -15,6 +15,9 @@ Below are the available variables with their default values (refer to ```default
 ---
 ### API Connection Variables
 ```
+kerio_control_admin_user: "Admin"
+kerio_control_admin_pass: ""
+
 kctl_port: 4081
 kctl_api_url: https://{{ ansible_host }}:{{ kctl_port }}/admin/api/jsonrpc/
 kctl_validate_certs: false
@@ -127,6 +130,9 @@ Example
 ```hostvar.yml```
 
 ```
+kerio_control_admin_user: "Admin"
+kerio_control_admin_pass: "adminpass"
+
 kctl_users:
   - { kctl_user_name: "example1",
       kctl_user_full_name: "Example User",

@@ -10,6 +10,8 @@ kctl_protected_users:
   - Admin
 
 # API connection variables
+kerio_control_admin_user: "Admin"
+kerio_control_admin_pass: ""
 kctl_port: 4081
 kctl_api_url: https://{{ ansible_host }}:{{ kctl_port }}/admin/api/jsonrpc/
 kctl_validate_certs: false
