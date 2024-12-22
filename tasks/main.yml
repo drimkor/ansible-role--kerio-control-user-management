@@ -3,7 +3,7 @@
 
 - name: Set start timestamp
   ansible.builtin.set_fact:
-    kctl_users_start_timestamp: "{{ now(utc=true,fmt='%Y-%m-%d %H:%M:%S') }} (UTC)"
+    kctl_users_start_timestamp: "{{ now(utc=true, fmt='%Y-%m-%d %H:%M:%S') }} (UTC)"
 
 - name: Login to a Kerio Control API
   ansible.builtin.include_tasks:
@@ -34,7 +34,7 @@
 
 - name: Set end timestamp
   ansible.builtin.set_fact:
-    kctl_users_end_timestamp: "{{ now(utc=true,fmt='%Y-%m-%d %H:%M:%S') }} (UTC)"
+    kctl_users_end_timestamp: "{{ now(utc=true, fmt='%Y-%m-%d %H:%M:%S') }} (UTC)"
 
 - name: Render report
   ansible.builtin.include_tasks:

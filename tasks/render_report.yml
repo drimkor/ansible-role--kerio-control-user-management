@@ -9,12 +9,14 @@
 
     - name: Render existing users list
       ansible.builtin.set_fact:
-        kctl_user_list_exists: "{{ kctl_user_list_exists | default([]) + [{'id': item.id, 'user_name': item.credentials.userName, 'full_name': item.fullName}] }}"
+        kctl_user_list_exists: "{{ kctl_user_list_exists | default([]) +
+          [{'id': item.id, 'user_name': item.credentials.userName, 'full_name': item.fullName}] }}"
       with_items: "{{ kctl_users_get_response.json.result.list }}"
 
     - name: Render variable report list create
       ansible.builtin.set_fact:
-        kctl_report_list_create: "{{ kctl_report_list_create | default([]) + [{'id': item.id, 'user_name': item.user_name, 'full_name': item.full_name}] }}"
+        kctl_report_list_create: "{{ kctl_report_list_create | default([]) +
+          [{'id': item.id, 'user_name': item.user_name, 'full_name': item.full_name}] }}"
       with_items: "{{ kctl_user_list_exists }}"
       when:
         - kctl_users_create_response is defined
