@@ -6,7 +6,6 @@
 {% set kctl_counter_existen = namespace(value=0) %}
 {##}
 Report:
-{{ now(utc=true,fmt='%Y-%m-%d %H:%M:%S') }} (UTC)
 {% if kctl_users_list_delete is defined %}
 
 Users deletion report:
@@ -109,3 +108,6 @@ Total: {{ kctl_counter_existen.value }}
 {{ '____________________________________________________________________________________________________' }}
 
 Delete: {{ kctl_counter_delete.value }}   Create: {{ kctl_counter_create.value }}   Update: {{ kctl_counter_update.value }}   Error: {{ kctl_counter_error.value }}
+
+Start: {{ kctl_users_start_timestamp }}   End: {{ kctl_users_end_timestamp }}
+{{ '____________________________________________________________________________________________________' }}
