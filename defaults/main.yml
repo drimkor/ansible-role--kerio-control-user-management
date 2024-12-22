@@ -16,6 +16,14 @@ kctl_port: 4081
 kctl_api_url: https://{{ ansible_host }}:{{ kctl_port }}/admin/api/jsonrpc/
 kctl_validate_certs: false
 
+# Reporting settings variables
+kctl_report_stdout_enable: true
+
+kctl_report_file_enable: false
+kctl_report_file_path: '~'
+kctl_report_file_name: kctl_users_report
+kctl_report_file_host: localhost
+
 # Users domain. It should be the same for the user list.
 kctl_domain_id: "local"
 

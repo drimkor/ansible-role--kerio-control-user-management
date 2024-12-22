@@ -24,6 +24,17 @@ kctl_validate_certs: false
 ```
 
 ---
+### Reporting settings
+```
+kctl_report_stdout_enable: true
+
+kctl_report_file_enable: false
+kctl_report_file_path: '~'
+kctl_report_file_name: kctl_users_report
+kctl_report_file_host: localhost
+```
+
+---
 ### User Creation Policies
 ```
 kctl_user_creating_polices_enable: true

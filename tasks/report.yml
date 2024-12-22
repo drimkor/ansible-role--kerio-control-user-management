@@ -1,7 +1,20 @@
 ---
 
-- name: Report
+- name: Report to file
+  ansible.builtin.copy:
+    content: "{{ kctl_report }}"
+    dest: "{{ kctl_report_file_path }}/{{ kctl_report_file_name }}"
+    mode: preserve
+  delegate_to: "{{ kctl_report_file_host }}"
+  when:
+    - kctl_report_file_enable
+    - kctl_report_file_path is defined
+    - kctl_report_file_name is defined
+    - kctl_report_file_host is defined
+
+- name: Report to stdout
   ansible.builtin.debug:
     msg: "{{ kctl_report }}"
+  when: kctl_report_stdout_enable
 
 ...
