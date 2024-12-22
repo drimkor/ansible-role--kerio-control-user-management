@@ -6,6 +6,12 @@
 {% set kctl_counter_existen = namespace(value=0) %}
 {##}
 Report:
+{% if kctl_login_error is defined%}
+
+    {{ '[ ERROR ]  '}}Code: {{ kctl_logon_response.json.error.code }} Message: {{ kctl_logon_response.json.error.message }}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
+{%endif%}
+{##}
 {% if kctl_users_list_delete is defined %}
 
 Users deletion report:
@@ -97,6 +103,7 @@ Users creation report:
 {##}
 {{ '____________________________________________________________________________________________________' }}
 
+{% if kctl_user_list_exists is defined %}
 All existing users on the Kerio Control host.
 
   {% for item in kctl_user_list_exists -%}
@@ -106,6 +113,7 @@ All existing users on the Kerio Control host.
 
 Total: {{ kctl_counter_existen.value }}
 {{ '____________________________________________________________________________________________________' }}
+{% endif %}
 
 Delete: {{ kctl_counter_delete.value }}   Create: {{ kctl_counter_create.value }}   Update: {{ kctl_counter_update.value }}   Error: {{ kctl_counter_error.value }}
 

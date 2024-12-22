@@ -6,12 +6,14 @@
     - name: Get users after all operations
       ansible.builtin.include_tasks:
         file: get_users.yml
+      when: kctl_login_error is undefined
 
     - name: Render existing users list
       ansible.builtin.set_fact:
         kctl_user_list_exists: "{{ kctl_user_list_exists | default([]) +
           [{'id': item.id, 'user_name': item.credentials.userName, 'full_name': item.fullName}] }}"
       with_items: "{{ kctl_users_get_response.json.result.list }}"
+      when: kctl_users_get_response.json.result.list is defined
 
     - name: Render variable report list create
       ansible.builtin.set_fact:

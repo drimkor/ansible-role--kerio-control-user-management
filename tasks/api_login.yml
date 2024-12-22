@@ -26,4 +26,9 @@
   no_log: true
   delegate_to: localhost
 
+- name: Login to a Kerio Control API error
+  ansible.builtin.set_fact:
+    kctl_login_error: kctl_logon_response.json.error
+  when: kctl_logon_response.json.error is defined
+
 ...
