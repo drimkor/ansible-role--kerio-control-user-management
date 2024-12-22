@@ -33,6 +33,15 @@ kctl_report_file_path: '~'
 kctl_report_file_name: kctl_users_report
 kctl_report_file_host: localhost
 ```
+Defines the configuration options for generating and storing reports. 
+
+The ```kctl_report_stdout_enable``` - controls whether the report is output to the standard output (console/terminal). 
+
+The ```kctl_report_file_enable``` - determines whether the report should be saved to a file. 
+
+If ```kctl_report_file_enable``` is enabled, specify the desired file location and name (```kctl_report_file_path``` and ```kctl_report_file_name```). The file name can contain variables such as ```kctl_users_start_timestamp```, ```kctl_users_end_timestamp```, etc.
+
+The ```kctl_report_file_host``` indicates the system responsible for storing the report file.
 
 ---
 ### User Creation Policies
@@ -144,6 +153,8 @@ Example
 kerio_control_admin_user: "Admin"
 kerio_control_admin_pass: "adminpass"
 
+kctl_report_file_enable: true
+
 kctl_users:
   - { kctl_user_name: "example1",
       kctl_user_full_name: "Example User",
@@ -156,7 +167,39 @@ kctl_users:
       kctl_user_password: "password2"
     }
 ```
+```~/kctl_users_report```
 
+```
+Report:
+
+Users deletion report:
+
+  [ D ]  User: cc067446-15d3-ad4f-8448-2af62ec1f238  -  Test2  -  
+  [ D ]  User: 266d1f7f-b2cd-cf44-8ca7-66fc32b94a51  -  Test5  -  
+  
+  [ OK ]  The users' configuration has been confirmed.
+
+Users creation report:
+
+  [ C ]  User: 191ab500-f9d5-e446-87df-7fc080e876fa  -  example1  -  Example User
+  [ C ]  User: 415112bf-08f0-644c-81b0-b4a95e660135  -  example2  -  
+  
+____________________________________________________________________________________________________
+
+All existing users on the Kerio Control host.
+
+  User: 493c92f5-b9be-a94f-ba7a-86bc35f2539b  -  Admin  -  
+  User: 191ab500-f9d5-e446-87df-7fc080e876fa  -  example1  -  Example User
+  User: 415112bf-08f0-644c-81b0-b4a95e660135  -  example2  -  
+  
+Total: 3
+____________________________________________________________________________________________________
+
+Delete: 2   Create: 2   Update: 0   Error: 0
+
+Start: 2024-12-22 01:27:38 (UTC)   End: 2024-12-22 01:27:47 (UTC)
+____________________________________________________________________________________________________
+```
 Dependencies
 ------------
 None.
