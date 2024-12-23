@@ -36,7 +36,7 @@
       register: kctl_users_update_response
       delegate_to: localhost
 
-    - name: Reloads configuration and returns timestamp of current configuration
+    - name: Update user - Reloads configuration and returns timestamp
       ansible.builtin.uri:
         url: "{{ kctl_api_url }}"
         validate_certs: "{{ kctl_validate_certs }}"
@@ -53,13 +53,20 @@
       register: kctl_get_config_timestamp_response
       delegate_to: localhost
 
-    - name: Timestamp list
+    - name: Collect API errors
+      ansible.builtin.set_fact:
+        kctl_api_error: "{{ kctl_api_error | default([]) +
+          [{'kctl_api_error_task_name': 'Update user - Reloads configuration and returns timestamp',
+              'kctl_api_error_msg': kctl_get_config_timestamp_response.json.error}] }}"
+      when: kctl_get_config_timestamp_response.json.error is defined
+
+    - name: Update user - Timestamp list
       ansible.builtin.set_fact:
         kctl_timestamp_list_update: "{{ kctl_timestamp_list_update | default([]) + [item] }}"
       with_items: "{{ kctl_get_config_timestamp_response.json.result.clientTimestampList }}"
       when: kctl_get_config_timestamp_response.json.result.clientTimestampList is defined
 
-    - name: Confirm the new configuration
+    - name: Update user - Confirm config
       ansible.builtin.uri:
         url: "{{ kctl_api_url }}"
         validate_certs: "{{ kctl_validate_certs }}"
@@ -80,5 +87,17 @@
       register: kctl_confirmation_update
       when: kctl_timestamp_list_update is defined
       delegate_to: localhost
+
+    - name: Collect API errors
+      ansible.builtin.set_fact:
+        kctl_api_error: "{{ kctl_api_error | default([]) +
+          [{'kctl_api_error_task_name': 'Update user - Confirm Config',
+              'kctl_api_error_msg': kctl_confirmation_update.json.error}] }}"
+      when: kctl_confirmation_update.json.error is defined
+  rescue:
+    - name: Collect task errors
+      ansible.builtin.set_fact:
+        kctl_task_errors: "{{ kctl_task_errors | default([]) +
+          [{'kctl_error_task_name': ansible_failed_task.name, 'kctl_error_task_msg': ansible_failed_result.msg}] }}"
 
 ...

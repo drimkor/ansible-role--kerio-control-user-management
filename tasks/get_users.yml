@@ -1,31 +1,48 @@
 ---
 
-- name: Get Users
-  ansible.builtin.uri:
-    url: "{{ kctl_api_url }}"
-    validate_certs: "{{ kctl_validate_certs }}"
-    timeout: 600
-    method: POST
-    headers:
-      Cookie: "{{ kctl_logon_response.cookies_string }}"
-      X-Token: "{{ kctl_logon_response.json.result.token }}"
-    body_format: json
-    body: |
-      {
-        "jsonrpc":"2.0","id":1,"method":"Users.get",
-        "params":
-          {
-            "query":
-              {
-                "start":0,
-                "limit":-1,
-                "orderBy":[{"columnName":"userName","direction":"Asc"}]
-              },
-            "domainId":"{{ kctl_domain_id }}"
-          }
-      }
-  register: kctl_users_get_response
+- name: Get users
   no_log: true
-  delegate_to: localhost
+  when:
+    - kctl_logon_response.cookies_string is defined
+    - kctl_logon_response.json.result.token is defined
+  block:
+    - name: Get Users
+      ansible.builtin.uri:
+        url: "{{ kctl_api_url }}"
+        validate_certs: "{{ kctl_validate_certs }}"
+        timeout: 600
+        method: POST
+        headers:
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
+        body_format: json
+        body: |
+          {
+            "jsonrpc":"2.0","id":1,"method":"Users.get",
+            "params":
+              {
+                "query":
+                  {
+                    "start":0,
+                    "limit":-1,
+                    "orderBy":[{"columnName":"userName","direction":"Asc"}]
+                  },
+                "domainId":"{{ kctl_domain_id }}"
+              }
+          }
+      register: kctl_users_get_response
+      delegate_to: localhost
+
+    - name: Collect API errors
+      ansible.builtin.set_fact:
+        kctl_api_error: "{{ kctl_api_error | default([]) +
+          [{'kctl_api_error_task_name': 'Get Users',
+              'kctl_api_error_msg': kctl_users_get_response.json.error}] }}"
+      when: kctl_users_get_response.json.error is defined
+  rescue:
+    - name: Collect task errors
+      ansible.builtin.set_fact:
+        kctl_task_errors: "{{ kctl_task_errors | default([]) +
+          [{'kctl_error_task_name': ansible_failed_task.name, 'kctl_error_task_msg': ansible_failed_result.msg}] }}"
 
 ...

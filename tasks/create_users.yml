@@ -1,26 +1,40 @@
 ---
 
-- name: Create User
-  ansible.builtin.uri:
-    url: "{{ kctl_api_url }}"
-    validate_certs: "{{ kctl_validate_certs }}"
-    timeout: 600
-    method: POST
-    headers:
-      Cookie: "{{ kctl_logon_response.cookies_string }}"
-      X-Token: "{{ kctl_logon_response.json.result.token }}"
-    body_format: json
-    body: |
-      {
-        "jsonrpc":"2.0","id":1,"method":"Users.create",
-        "params":
-          {
-            "users":{{ kctl_users_list_create }},
-            "domainId":"{{ kctl_domain_id }}"
-          }
-      }
-  register: kctl_users_create_response
+- name: Creation users
   no_log: true
-  delegate_to: localhost
+  block:
+    - name: Create user
+      ansible.builtin.uri:
+        url: "{{ kctl_api_url }}"
+        validate_certs: "{{ kctl_validate_certs }}"
+        timeout: 600
+        method: POST
+        headers:
+          Cookie: "{{ kctl_logon_response.cookies_string }}"
+          X-Token: "{{ kctl_logon_response.json.result.token }}"
+        body_format: json
+        body: |
+          {
+            "jsonrpc":"2.0","id":1,"method":"Users.create",
+            "params":
+              {
+                "users":{{ kctl_users_list_create }},
+                "domainId":"{{ kctl_domain_id }}"
+              }
+          }
+      register: kctl_users_create_response
+      delegate_to: localhost
+
+    - name: Collect API errors
+      ansible.builtin.set_fact:
+        kctl_api_error: "{{ kctl_api_error | default([]) +
+          [{'kctl_api_error_task_name': 'Create User',
+              'kctl_api_error_msg': kctl_users_create_response.json.error}] }}"
+      when: kctl_users_create_response.json.error is defined
+  rescue:
+    - name: Collect task errors
+      ansible.builtin.set_fact:
+        kctl_task_errors: "{{ kctl_task_errors | default([]) +
+          [{'kctl_error_task_name': ansible_failed_task.name, 'kctl_error_task_msg': ansible_failed_result.msg}] }}"
 
 ...

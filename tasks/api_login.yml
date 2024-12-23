@@ -1,34 +1,43 @@
 ---
 
-- name: Login to a Kerio Control API
-  ansible.builtin.uri:
-    url: "{{ kctl_api_url }}"
-    validate_certs: "{{ kctl_validate_certs }}"
-    timeout: 600
-    method: POST
-    body_format: json
-    body: |
-      {
-        "jsonrpc":"2.0","id":1,"method":"Session.login",
-        "params":
+- name: Login
+  no_log: true
+  block:
+    - name: Login to a Kerio Control API
+      ansible.builtin.uri:
+        url: "{{ kctl_api_url }}"
+        validate_certs: "{{ kctl_validate_certs }}"
+        timeout: 600
+        method: POST
+        body_format: json
+        body: |
           {
-            "userName":"{{ kerio_control_admin_user }}",
-            "password":"{{ kerio_control_admin_pass }}",
-            "application":
+            "jsonrpc":"2.0","id":1,"method":"Session.login",
+            "params":
               {
-                "name":"Ansible",
-                "vendor":"",
-                "version":""
+                "userName":"{{ kerio_control_admin_user }}",
+                "password":"{{ kerio_control_admin_pass }}",
+                "application":
+                  {
+                    "name":"Ansible",
+                    "vendor":"",
+                    "version":""
+                  }
               }
           }
-      }
-  register: kctl_logon_response
-  no_log: true
-  delegate_to: localhost
+      register: kctl_logon_response
+      delegate_to: localhost
 
-- name: Login to a Kerio Control API error
-  ansible.builtin.set_fact:
-    kctl_login_error: kctl_logon_response.json.error
-  when: kctl_logon_response.json.error is defined
+    - name: Collect API errors
+      ansible.builtin.set_fact:
+        kctl_api_error: "{{ kctl_api_error | default([]) +
+          [{'kctl_api_error_task_name': 'Login to a Kerio Control API',
+            'kctl_api_error_msg': kctl_logon_response.json.error}] }}"
+      when: kctl_logon_response.json.error is defined
+  rescue:
+    - name: Collect task errors
+      ansible.builtin.set_fact:
+        kctl_task_errors: "{{ kctl_task_errors | default([]) +
+          [{'kctl_error_task_name': ansible_failed_task.name, 'kctl_error_task_msg': ansible_failed_result.msg}] }}"
 
 ...

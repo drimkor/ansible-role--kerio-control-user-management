@@ -58,5 +58,10 @@
         - kctl_username_list_update is defined
         - item.kctl_user_name in kctl_username_list_update
         - item.kctl_user_name not in kctl_protected_users
+  rescue:
+    - name: Collect task errors
+      ansible.builtin.set_fact:
+        kctl_task_errors: "{{ kctl_task_errors | default([]) +
+          [{'kctl_error_task_name': ansible_failed_task.name, 'kctl_error_task_msg': ansible_failed_result.msg}] }}"
 
 ...

@@ -6,7 +6,6 @@
     - name: Get users after all operations
       ansible.builtin.include_tasks:
         file: get_users.yml
-      when: kctl_login_error is undefined
 
     - name: Render existing users list
       ansible.builtin.set_fact:

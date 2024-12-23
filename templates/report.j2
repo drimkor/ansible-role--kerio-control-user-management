@@ -6,10 +6,25 @@
 {% set kctl_counter_existen = namespace(value=0) %}
 {##}
 Report:
-{% if kctl_login_error is defined%}
+{##}
+{% if kctl_task_errors is defined %}
 
-    {{ '[ ERROR ]  '}}Code: {{ kctl_logon_response.json.error.code }} Message: {{ kctl_logon_response.json.error.message }}
+Task errrors:
+
+  {%for item in kctl_task_errors -%}
+    {{ '[ ERROR ]  '}}{{ item.kctl_error_task_name }} - {{ item.kctl_error_task_msg }}
 {% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
+  {%endfor%}
+{% endif%}
+{##}
+{% if kctl_api_error is defined %}
+
+API errors:
+
+  {%for item in kctl_api_error -%}
+    {{ '[ ERROR ]  '}}{{item.kctl_api_error_task_name}} - Code: {{ item.kctl_api_error_msg.code }} Msg: {{ item.kctl_api_error_msg.message }}
+{% set kctl_counter_error.value = kctl_counter_error.value + 1 %}
+  {%endfor%}
 {%endif%}
 {##}
 {% if kctl_users_list_delete is defined %}
@@ -101,7 +116,7 @@ Users creation report:
 
 {% endif %}
 {##}
-{{ '____________________________________________________________________________________________________' }}
+{{ '__________________________________________________________________________________________________________________________________' }}
 
 {% if kctl_user_list_exists is defined %}
 All existing users on the Kerio Control host.
@@ -112,10 +127,10 @@ All existing users on the Kerio Control host.
   {% endfor %}
 
 Total: {{ kctl_counter_existen.value }}
-{{ '____________________________________________________________________________________________________' }}
+{{ '__________________________________________________________________________________________________________________________________' }}
 {% endif %}
 
 Delete: {{ kctl_counter_delete.value }}   Create: {{ kctl_counter_create.value }}   Update: {{ kctl_counter_update.value }}   Error: {{ kctl_counter_error.value }}
 
 Start: {{ kctl_users_start_timestamp }}   End: {{ kctl_users_end_timestamp }}
-{{ '____________________________________________________________________________________________________' }}
+{{ '__________________________________________________________________________________________________________________________________' }}
