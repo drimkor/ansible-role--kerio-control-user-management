@@ -21,6 +21,7 @@ kerio_control_admin_pass: ""
 kctl_port: 4081
 kctl_api_url: https://{{ ansible_host }}:{{ kctl_port }}/admin/api/jsonrpc/
 kctl_validate_certs: false
+kctl_api_connection_timeout: 60
 ```
 
 ---
@@ -176,8 +177,6 @@ Host: control  192.168.0.1
 
 Users deletion report:
 
-  [ D ]  User: 0bf82ae8-6ae3-6c46-a0bd-6c2a55e6a5f8  -  Test  -  T T T.T
-  [ D ]  User: e76780f1-0a01-1842-8f26-74ca352cb0c7  -  Test2  -  
   [ D ]  User: 64405a20-4fd8-de44-b335-647adc5e935c  -  Test4  -  
   [ D ]  User: bfd57765-8afa-2043-aa4c-b87db7670ad3  -  Test5  -  
   
@@ -199,7 +198,7 @@ All existing users on the Kerio Control host.
 Total: 3
 __________________________________________________________________________________________________________________________________
 
-Delete: 4   Create: 2   Update: 0   Error: 0
+Delete: 2   Create: 2   Update: 0   Error: 0
 
 Start: 2024-12-23 02:47:59 (UTC)   End: 2024-12-23 02:48:11 (UTC)
 ```

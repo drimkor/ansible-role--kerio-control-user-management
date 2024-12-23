@@ -12,9 +12,11 @@ kctl_protected_users:
 # API connection variables
 kerio_control_admin_user: "Admin"
 kerio_control_admin_pass: ""
+
 kctl_port: 4081
 kctl_api_url: https://{{ ansible_host }}:{{ kctl_port }}/admin/api/jsonrpc/
 kctl_validate_certs: false
+kctl_api_connection_timeout: 60
 
 # Reporting settings variables
 kctl_report_stdout_enable: true

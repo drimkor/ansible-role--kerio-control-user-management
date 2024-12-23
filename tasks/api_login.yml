@@ -7,7 +7,7 @@
       ansible.builtin.uri:
         url: "{{ kctl_api_url }}"
         validate_certs: "{{ kctl_validate_certs }}"
-        timeout: 600
+        timeout: "{{ kctl_api_connection_timeout }}"
         method: POST
         body_format: json
         body: |
