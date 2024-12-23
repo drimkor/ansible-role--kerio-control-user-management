@@ -172,33 +172,36 @@ kctl_users:
 ```
 Report:
 
+Host: control  192.168.0.1
+
 Users deletion report:
 
-  [ D ]  User: cc067446-15d3-ad4f-8448-2af62ec1f238  -  Test2  -  
-  [ D ]  User: 266d1f7f-b2cd-cf44-8ca7-66fc32b94a51  -  Test5  -  
+  [ D ]  User: 0bf82ae8-6ae3-6c46-a0bd-6c2a55e6a5f8  -  Test  -  T T T.T
+  [ D ]  User: e76780f1-0a01-1842-8f26-74ca352cb0c7  -  Test2  -  
+  [ D ]  User: 64405a20-4fd8-de44-b335-647adc5e935c  -  Test4  -  
+  [ D ]  User: bfd57765-8afa-2043-aa4c-b87db7670ad3  -  Test5  -  
   
   [ OK ]  The users' configuration has been confirmed.
 
 Users creation report:
 
-  [ C ]  User: 191ab500-f9d5-e446-87df-7fc080e876fa  -  example1  -  Example User
-  [ C ]  User: 415112bf-08f0-644c-81b0-b4a95e660135  -  example2  -  
+  [ C ]  User: b2a21986-7c04-a64a-8258-d336c39ac29b  -  example1  -  Example User
+  [ C ]  User: 36d07f90-d9fb-4149-8de6-06f9e7239bda  -  example2  -  
   
-____________________________________________________________________________________________________
+__________________________________________________________________________________________________________________________________
 
 All existing users on the Kerio Control host.
 
   User: 493c92f5-b9be-a94f-ba7a-86bc35f2539b  -  Admin  -  
-  User: 191ab500-f9d5-e446-87df-7fc080e876fa  -  example1  -  Example User
-  User: 415112bf-08f0-644c-81b0-b4a95e660135  -  example2  -  
+  User: b2a21986-7c04-a64a-8258-d336c39ac29b  -  example1  -  Example User
+  User: 36d07f90-d9fb-4149-8de6-06f9e7239bda  -  example2  -  
   
 Total: 3
-____________________________________________________________________________________________________
+__________________________________________________________________________________________________________________________________
 
-Delete: 2   Create: 2   Update: 0   Error: 0
+Delete: 4   Create: 2   Update: 0   Error: 0
 
-Start: 2024-12-22 01:27:38 (UTC)   End: 2024-12-22 01:27:47 (UTC)
-____________________________________________________________________________________________________
+Start: 2024-12-23 02:47:59 (UTC)   End: 2024-12-23 02:48:11 (UTC)
 ```
 Dependencies
 ------------

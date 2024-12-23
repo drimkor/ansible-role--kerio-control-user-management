@@ -6,6 +6,8 @@
 {% set kctl_counter_existen = namespace(value=0) %}
 {##}
 Report:
+
+Host: {{ inventory_hostname }}  {{ ansible_host }}
 {##}
 {% if kctl_task_errors is defined %}
 
