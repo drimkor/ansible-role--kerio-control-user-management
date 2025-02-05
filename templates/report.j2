@@ -3,7 +3,7 @@
 {% set kctl_counter_update = namespace(value=0) %}
 {% set kctl_counter_delete = namespace(value=0) %}
 {% set kctl_counter_error = namespace(value=0) %}
-{% set kctl_counter_existen = namespace(value=0) %}
+{% set kctl_counter_exists = namespace(value=0) %}
 {##}
 Report:
 
@@ -11,7 +11,7 @@ Host: {{ inventory_hostname }}  {{ ansible_host }}
 {##}
 {% if kctl_task_errors is defined %}
 
-Task errrors:
+Task errors:
 
   {%for item in kctl_task_errors -%}
     {{ '[ ERROR ]  '}}{{ item.kctl_error_task_name }} - {{ item.kctl_error_task_msg }}
@@ -125,10 +125,10 @@ All existing users on the Kerio Control host.
 
   {% for item in kctl_user_list_exists -%}
     User: {{ item.id }}  -  {{ item.user_name }}  -  {{ item.full_name }}
-{% set kctl_counter_existen.value = kctl_counter_existen.value + 1 %}
+{% set kctl_counter_exists.value = kctl_counter_exists.value + 1 %}
   {% endfor %}
 
-Total: {{ kctl_counter_existen.value }}
+Total: {{ kctl_counter_exists.value }}
 {{ '__________________________________________________________________________________________________________________________________' }}
 {% endif %}
 
